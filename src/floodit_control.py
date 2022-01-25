@@ -41,7 +41,7 @@ class Controller:
 
         self.view.main(b)
 
-    def select_next_colour(self, code):
+    def on_next_colour(self, code):
         print("Next colour: " + self.colours[code])
         b = self.model.start_flood(code)
         print(b)
@@ -56,19 +56,19 @@ class Controller:
         self.view.show_board(b)
         self.view.show_scores()
         
-    def change_user(self, name):
+    def on_change_user(self, name):
         print("New user name: " + name)
         self.user = name
         write_game_settings("floodit_settings.csv", self.size, self.user, self.colours)
         self.view.show_user()
         
-    def change_size(self, size):
+    def on_change_size(self, size):
         print("New board size: " + str(size))
         self.size = size
         write_game_settings("floodit_settings.csv", self.size, self.user, self.colours)
-        self.request_replay()
+        self.on_request_replay()
         
-    def request_replay(self):
+    def on_request_replay(self):
         print("Replay requested")
         self.moves_taken = 0
         self.success = False

@@ -92,21 +92,21 @@ class View:
     #################### Event Handlers ##################
     
     def handle_request_replay(self):
-        self.controller.request_replay()
+        self.controller.on_request_replay()
         
             
     def handle_set_next_colour(self, x, y):
         #print("Start flood with: (" + str(x) + ", " + str(y) + ")")
         flood_colour = self.palette.get_pixel(x,y)
         print("Selected colour = " + flood_colour)
-        self.controller.select_next_colour(x)
+        self.controller.on_next_colour(x)
 
 
     def handle_set_user(self):
         new_user = self.app.question("Hello", "What's your name?")
         # If cancel is pressed, None is returned so check a name was entered
         if new_user is not None and new_user.isalnum():
-            self.controller.change_user(new_user)          
+            self.controller.on_user(new_user)          
 
 
     def handle_modify_settings(self):
@@ -123,10 +123,10 @@ class View:
     def handle_save_settings(self):     
         new_user = self.input_box_1.value  
         if new_user is not None and new_user.isalnum():
-            self.controller.change_user(new_user) 
+            self.controller.on_change_user(new_user) 
         new_size = self.input_box_2.value
         if new_size is not None and new_size.isdecimal():
-            self.controller.change_size(int(new_size)) 
+            self.controller.on_change_size(int(new_size)) 
         print("Board size: " + str(self.controller.size) + ", User: " + self.controller.user)
         self.input_window.destroy()
  
