@@ -3,7 +3,7 @@
 # ------------------------------
 import random
 import numpy as np
-
+import json
 # ------------------------------
 # Variables
 # ------------------------------
@@ -69,6 +69,70 @@ class Model:
                     return False
         return True
     
-#    def test_model(self):
-#        model = Model(12, 8)
-#        return self
+    
+    def save_model_state(self, filename):
+
+        try:
+            # open file for writing
+            with open(filename, 'w+') as writer:
+                
+                writer.writelines("board_size\n")
+                writer.writelines(str(self.board_size) + "\n")
+                writer.writelines("num_codes\n")
+                writer.writelines(str(self.num_codes) + "\n")
+                
+                writer.writelines("board\n")
+                for i in range(self.board_size):
+                    line = str(list(self.board[i])) + "\n"
+                    writer.writelines(line)
+                
+                print("Saved model state in: " + filename)
+                writer.close()
+        except:
+            print("WARNING: file: \'" + filename + "\' write error")
+                
+        
+    def restore_model_state(self, filename):
+
+        try:
+            # open file for reading
+            with open(filename, 'r') as reader:
+
+                print("Restoring model state from file: " + filename)
+                
+                lines = reader.readlines()
+                print("No of lines = " + str(len(lines)))
+                
+                i = 0
+                while i < len(lines) - 1:
+                    
+                    if "board_size" in lines[i]:
+                        self.board_size = int(lines[i+1])
+                        print("board_size = " + str(self.board_size))
+                        
+                    if "num_codes" in lines[i]:
+                        self.num_codes = int(lines[i+1])
+                        print("num_codes = " + str(self.num_codes))
+                        
+                    if i > 1 and "board" in lines[i]:
+
+                        for j in range(self.board_size):
+                            row = lines[i+j+1]
+                            print("row = " + row)
+                            self.board[j] = np.array(json.loads(row))
+                    
+                        print("board = ")
+                        print(self.board)
+                        i += self.board_size
+                        
+                    i += 1
+
+                reader.close()
+                
+        except:
+            print("WARNING: error reading file: \'" + filename + "\' ")
+    
+#############################################################################
+
+m = Model(8, 7)
+m.fill_board(8, 7)
