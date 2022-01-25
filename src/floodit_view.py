@@ -46,7 +46,7 @@ class View:
         self.replay_button.bg = "green"
         self.replay_button.text_size = 20
 
-        self.settings_button = PushButton(self.app, text="Settings", command=self.handle_modify_settings)
+        #self.settings_button = PushButton(self.app, text="Settings", command=self.handle_modify_settings)
 
         self.show_board(board_codes)
         self._init_palette()
@@ -109,26 +109,26 @@ class View:
             self.controller.on_user(new_user)          
 
 
-    def handle_modify_settings(self):
-        self.input_window = Window(self.app, "Modify Settings", height=200)
-        Text(self.input_window, text="User name", size=15)
-        self.input_box_1 = TextBox(self.input_window, width=30)
-        Text(self.input_window, text="Board Size", size=15)
-        self.input_box_2 = TextBox(self.input_window, width=30)
-        self.input_box_1.focus()
-        PushButton(self.input_window, text="Continue", command=self.handle_save_settings)
+#    def handle_modify_settings(self):
+#        self.input_window = Window(self.app, "Modify Settings", height=200)
+#        Text(self.input_window, text="User name", size=15)
+#        self.input_box_1 = TextBox(self.input_window, width=30)
+#        Text(self.input_window, text="Board Size", size=15)
+#        self.input_box_2 = TextBox(self.input_window, width=30)
+#        self.input_box_1.focus()
+#        PushButton(self.input_window, text="Continue", command=self.handle_save_settings)
         
 
     # Check for valid inputs and send any new data to the controller.    
-    def handle_save_settings(self):     
-        new_user = self.input_box_1.value  
-        if new_user is not None and new_user.isalnum():
-            self.controller.on_change_user(new_user) 
-        new_size = self.input_box_2.value
-        if new_size is not None and new_size.isdecimal():
-            self.controller.on_change_size(int(new_size)) 
-        print("Board size: " + str(self.controller.size) + ", User: " + self.controller.user)
-        self.input_window.destroy()
+#    def handle_save_settings(self):     
+#        new_user = self.input_box_1.value  
+#        if new_user is not None and new_user.isalnum():
+#            self.controller.on_change_user(new_user) 
+#        new_size = self.input_box_2.value
+#        if new_size is not None and new_size.isdecimal():
+#            self.controller.on_change_size(int(new_size)) 
+#        print("Board size: " + str(self.controller.size) + ", User: " + self.controller.user)
+#        self.input_window.destroy()
  
 #--------------------------- end of View class ---------------------------
 
