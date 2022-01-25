@@ -7,28 +7,29 @@ import numpy as np
 # ------------------------------
 # Variables
 # ------------------------------
-MAX_BOARD_SIZE = 16
+
 
 # ------------------------------
 # Classes
 # ------------------------------
 
 class Model:
-    def __init__(self, initial_board_size, initial_codes):
-        self.board_size = initial_board_size
-        self.num_codes = initial_codes
-        self.board = np.zeros((MAX_BOARD_SIZE, MAX_BOARD_SIZE), dtype=int)
+    def __init__(self, board_size, num_codes):
+        self.board_size = board_size
+        self.num_codes = num_codes
+        self.board = np.zeros((board_size, board_size), dtype=int)
+
 
     def fill_board(self, size, num_codes):
-     
-        if size > MAX_BOARD_SIZE:
-            print("WARNING: board size > " + str(MAX_BOARD_SIZE))
-            size = MAX_BOARD_SIZE
+        if size > self.board_size:
+            print("WARNING: board size > " + str(self.board_size))
+            size = self.board_size
         for x in range(size):
             for y in range(size):
                 code = random.randint(0,num_codes-1)
                 self.board[x, y] = code
-        return self.board[0:self.board_size, 0:self.board_size]
+        return self.board
+    
     
     def start_flood(self, flood_code):
         print("Flood code = " + str(flood_code))
@@ -40,6 +41,7 @@ class Model:
         return self.board[0:self.board_size, 0:self.board_size]
         #win_check()
         
+
     # Recursively floods adjacent squares (by calling itself)
     def flood(self, x, y, target, replacement):
         # Algorithm from https://en.wikipedia.org/wiki/Flood_fill
@@ -57,6 +59,7 @@ class Model:
         if x-1 >= 0:                   # West
             self.flood(x-1, y, target, replacement)
            
+
     # Check whether all squares are the same
     def all_the_same(self):
         top_left = self.board[0][0]
