@@ -1,2 +1,0 @@
-moves_taken
-10
