@@ -2,7 +2,7 @@
 # Imports
 # ------------------------------
 
-from guizero import App, Window, Waffle, Text, TextBox, PushButton
+from guizero import App, Window, Waffle, Box, Text, TextBox, PushButton
 
 # ------------------------------
 # Variables
@@ -30,21 +30,28 @@ class View:
     def main(self, board_codes):
         print("In view.main()")
         self.app = App("Flood It")
-        self.button = PushButton(self.app, text="User: " + self.controller.user,
-                                 command=self.handle_set_user)
+        
         self.board = Waffle(self.app, width=self.controller.size,
                             height=self.controller.size, pad=0)
-        self.palette = Waffle(self.app, width=len(self.controller.colours),
-                              height=1, dotty=True, command=self.handle_set_next_colour)
-        self.score_text = Text(self.app)
-        self.win_text = Text(self.app)
-
-        self.best_score_display = Text(self.app, text = "Best score: " +
+        self.palette = Waffle(self.app, width=len(self.controller.colours), height=1,
+                              dotty=True, command=self.handle_set_next_colour)
+        
+        self.info_box = Box(self.app, layout="grid", border=10)
+        self.info_box.set_border(thickness=10, color=self.app.bg)
+        self.score_text = Text(self.info_box, grid=[0,0])     
+        self.win_text = Text(self.info_box, grid=[1,0])
+        self.win_text.value = "  "
+        self.best_score_display = Text(self.info_box, grid=[2,0], text = "   Best score: " +
             self.controller.best_player +": " + str(self.controller.best_score))
         
-        self.replay_button = PushButton(self.app, command=self.handle_request_replay, text="Replay")
-        self.replay_button.bg = "green"
-        self.replay_button.text_size = 20
+        self.panel = Box(self.app, layout="grid", border=10)
+        self.panel.set_border(thickness=10, color=self.app.bg)
+        self.user_button = PushButton(self.panel, grid=[0,0], text="User: " + self.controller.user,
+                                  command=self.handle_set_user)
+        self.replay_button = PushButton(self.panel, grid=[1,0], text="Replay", command=self.handle_request_replay)
+        self.replay_button.text_color = "grey"
+        self.save_button = PushButton(self.panel, grid=[2,0], text="Save", command=self.handle_request_save)
+        self.restore_button = PushButton(self.panel, grid=[3,0], text="Restore", command=self.handle_request_restore)
 
         #self.settings_button = PushButton(self.app, text="Settings", command=self.handle_modify_settings)
 
@@ -56,22 +63,24 @@ class View:
         
         
     def reset_board(self):
-        self.win_text.hide()
+        self.win_text.value = "   "
         self.score_text.value = "Move count: " + str(self.controller.moves_taken)
+        self.score_text.show()
         self.best_score_display.value = "Best score: " + self.controller.best_player +": " + str(self.controller.best_score)
-        self.replay_button.hide()
+        self.best_score_display.show()
+        self.replay_button.text_color = "grey"
                 
                 
     def show_board(self, board_codes):        
-        self.button.text = "User: " + self.controller.user
-        print(board_codes[0:self.controller.size, 0:self.controller.size])
+        self.user_button.text = "User: " + self.controller.user
+        #print(board_codes[0:self.controller.size, 0:self.controller.size])
         for x in range(self.controller.size):
             for y in range(self.controller.size):
                 self.board.set_pixel(y, x, self.controller.colours[board_codes[x,y]])
         
         
     def show_user(self):        
-        self.button.text = "User: " + self.controller.user
+        self.user_button.text = "User: " + self.controller.user
         
         
     def show_scores(self):
@@ -80,8 +89,9 @@ class View:
         self.best_score_display.value = "Best score: " + self.controller.best_player + ": " + str(self.controller.best_score)
         if self.controller.success == True:
             self.win_text.value = "You win!"
-            self.win_text.show()
-            self.replay_button.show()
+            self.score_text.hide()
+            self.best_score_display.hide()
+            self.replay_button.text_color = "black"
     
     #################### Helper Functions ################
         
@@ -94,11 +104,16 @@ class View:
     def handle_request_replay(self):
         self.controller.on_request_replay()
         
-            
+    def handle_request_save(self):
+        self.controller.on_request_save()
+        
+    def handle_request_restore(self):
+        self.controller.on_request_restore()
+        
     def handle_set_next_colour(self, x, y):
         #print("Start flood with: (" + str(x) + ", " + str(y) + ")")
         flood_colour = self.palette.get_pixel(x,y)
-        print("Selected colour = " + flood_colour)
+        #print("Selected colour = " + flood_colour)
         self.controller.on_next_colour(x)
 
 

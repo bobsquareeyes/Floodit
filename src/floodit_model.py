@@ -25,6 +25,7 @@ class Model:
             for y in range(self.board_size):
                 code = random.randint(0,self.num_codes-1)
                 self.board[x, y] = code
+        self.moves_taken = 0
         return self.board
     
     
@@ -33,6 +34,7 @@ class Model:
         if flood_code >= 0 and flood_code < self.num_codes:
             target = self.board[0,0]
             self.flood(0, 0, target, flood_code)
+            self.moves_taken += 1
         else:
             print("WARNING: flood_code out of range: " + str(flood_code))
         return self.board[0:self.board_size, 0:self.board_size]
@@ -115,7 +117,7 @@ class Model:
 
                         for j in range(self.board_size):
                             row = lines[i+j+1]
-                            print("row = " + row)
+                            #print("row = " + row)
                             self.board[j] = np.array(json.loads(row))
                     
                         print("board = ")
@@ -128,6 +130,8 @@ class Model:
                 
         except:
             print("WARNING: error reading file: \'" + filename + "\' ")
+        
+        return self.board
     
 #############################################################################
 
