@@ -43,7 +43,7 @@ class TestController:
 
         self.view.main(self.board)
 
-    def select_next_colour(self, code):
+    def on_next_colour(self, code):
         print("Next colour: " + self.colours[code])
 
         self.moves_taken += 1
@@ -53,26 +53,26 @@ class TestController:
             self.best_score = self.moves_taken
 
         self.view.show_board(self.board)
-        self.view.show_scores()
+        self.view.show_info()
         
-    def change_user(self, name):
+    def on_change_user(self, name):
         print("New user name: " + name)
         self.user = name
         write_game_settings("floodit_test_settings.csv", self.size, self.user, self.colours)
         self.view.show_user()
         
-    def change_size(self, size):
-        print("New board size: " + str(size))
-        self.size = size
-        write_game_settings("floodit_test_settings.csv", self.size, self.user, self.colours)
-        self.request_replay()
+    def on_request_save(self):
+        print("Save game requested")
         
-    def request_replay(self):
-        print("Replay requested")
+    def on_request_restore(self):
+        print("Restore game requested")
+        
+    def on_request_play(self):
+        print("Play requested")
         self.moves_taken = 0
         self.success = False
-        self.view.reset_board()
-        self.view.show_scores()
+        self.view.reset_user_interface()
+        self.view.show_info()
         
         num_codes = len(self.colours)
         for x in range(self.size):
