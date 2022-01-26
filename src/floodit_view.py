@@ -106,7 +106,7 @@ class View:
         new_user = self.app.question("Hello", "What's your name?")
         # If cancel is pressed, None is returned so check a name was entered
         if new_user is not None and new_user.isalnum():
-            self.controller.on_user(new_user)          
+            self.controller.on_change_user(new_user)          
 
 
 #    def handle_modify_settings(self):

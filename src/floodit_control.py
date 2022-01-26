@@ -11,7 +11,7 @@ from floodit_view import View
 # ------------------------------
 # Variables
 # ------------------------------
-MAX_BOARD_SIZE = 20
+MAX_BOARD_SIZE = 18
 # ------------------------------
 # Classes
 # ------------------------------
@@ -29,6 +29,8 @@ class Controller:
     def main(self):
         print("In main of controller")
         self.size, self.user, self.colours = read_game_settings("floodit_settings.csv")
+        if self.size > MAX_BOARD_SIZE:
+            self.size = MAX_BOARD_SIZE
 
         self.user_names, self.scores = read_game_scores("floodit_scores.csv")
 
@@ -37,7 +39,7 @@ class Controller:
         # create board object
         self.model = Model(self.size, len(self.colours))
 
-        b = self.model.fill_board(self.size, len(self.colours))
+        b = self.model.fill_board()
 
         self.view.main(b)
 
@@ -74,10 +76,10 @@ class Controller:
         self.success = False
         self.view.reset_board()
         self.view.show_scores()
-        b = self.model.fill_board(self.size, len(self.colours))
+        b = self.model.fill_board()
         self.view.show_board(b)        
         
-    # Check for lowest score
+    # Check for lowest score (could be a helper function instead of a method)
     def find_best_score(self, user_names, scores):
         best_score = 500
         best_player ="Nobody" # default       

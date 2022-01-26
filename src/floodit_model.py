@@ -20,13 +20,10 @@ class Model:
         self.board = np.zeros((board_size, board_size), dtype=int)
 
 
-    def fill_board(self, size, num_codes):
-        if size > self.board_size:
-            print("WARNING: board size > " + str(self.board_size))
-            size = self.board_size
-        for x in range(size):
-            for y in range(size):
-                code = random.randint(0,num_codes-1)
+    def fill_board(self):
+        for x in range(self.board_size):
+            for y in range(self.board_size):
+                code = random.randint(0,self.num_codes-1)
                 self.board[x, y] = code
         return self.board
     
@@ -134,5 +131,5 @@ class Model:
     
 #############################################################################
 
-m = Model(8, 7)
-m.fill_board(8, 7)
+#m = Model(8, 7)
+#m.fill_board()
