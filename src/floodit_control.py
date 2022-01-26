@@ -28,10 +28,10 @@ class Controller:
     
     def main(self):
         print("In main of controller")
-        self.size, self.user, self.colours = read_game_settings("floodit_settings.csv")
+        self.size, self.user, self.colours = read_game_settings("floodit_settings.txt")
         if self.size > MAX_BOARD_SIZE:
             self.size = MAX_BOARD_SIZE
-        self.user_names, self.scores = read_game_scores("floodit_scores.csv")
+        self.user_names, self.scores = read_game_scores("floodit_scores.txt")
         self.best_player, self.best_score = find_best_score(self.user_names, self.scores)
         # create board object
         self.model = Model(self.size, len(self.colours))
@@ -47,7 +47,7 @@ class Controller:
             self.success = True
             self.user_names.append(self.user)
             self.scores.append(self.moves_taken)
-            write_game_scores("floodit_scores.csv", self.user_names, self.scores)
+            write_game_scores("floodit_scores.txt", self.user_names, self.scores)
             self.best_player, self.best_score = find_best_score(self.user_names, self.scores)
         self.view.show_board(b)
         self.view.show_scores()
@@ -55,13 +55,13 @@ class Controller:
     def on_change_user(self, name):
         print("New user name: " + name)
         self.user = name
-        write_game_settings("floodit_settings.csv", self.size, self.user, self.colours)
+        write_game_settings("floodit_settings.txt", self.size, self.user, self.colours)
         self.view.show_user()
         
     def on_change_size(self, size):
         print("New board size: " + str(size))
         self.size = size
-        write_game_settings("floodit_settings.csv", self.size, self.user, self.colours)
+        write_game_settings("floodit_settings.txt", self.size, self.user, self.colours)
         self.on_request_replay()
         
     def on_request_replay(self):
