@@ -50,7 +50,7 @@ class Controller:
             write_game_scores("floodit_scores.txt", self.user_names, self.scores)
             self.best_player, self.best_score = find_best_score(self.user_names, self.scores)
         self.view.show_board(b)
-        self.view.show_scores()
+        self.view.show_info()
         
     def on_change_user(self, name):
         print("New user name: " + name)
@@ -58,18 +58,18 @@ class Controller:
         write_game_settings("floodit_settings.txt", self.size, self.user, self.colours)
         self.view.show_user()
         
-    def on_change_size(self, size):
-        print("New board size: " + str(size))
-        self.size = size
-        write_game_settings("floodit_settings.txt", self.size, self.user, self.colours)
-        self.on_request_replay()
+#    def on_change_size(self, size):
+#        print("New board size: " + str(size))
+#        self.size = size
+#        write_game_settings("floodit_settings.txt", self.size, self.user, self.colours)
+#        self.on_request_play()
         
-    def on_request_replay(self):
-        print("Replay requested")
+    def on_request_play(self):
+        print("Play requested")
         self.success = False
         self.moves_taken = 0
-        self.view.reset_board()
-        self.view.show_scores()
+        self.view.show_info()
+        self.view.reset_user_interface()
         b = self.model.fill_board()
         self.view.show_board(b)        
         
@@ -83,8 +83,8 @@ class Controller:
         self.restore_control_state("floodit_control_state.txt")
         b = self.model.restore_model_state("floodit_model_state.txt")
         self.view.show_board(b)
-        self.view.reset_board()
-        self.view.show_scores()
+        self.view.show_info()
+        self.view.reset_user_interface()
 
     def save_control_state(self, filename):
         try: # open file for writing          
