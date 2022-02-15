@@ -41,7 +41,7 @@ class Controller:
     def on_next_colour(self, code):
         print("Next colour = " + self.colours[code])
         b = self.model.start_flood(code)
-        print(b)
+        #print(b)
         self.moves_taken += 1
         if self.model.all_the_same():
             self.success = True

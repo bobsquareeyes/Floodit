@@ -2,6 +2,8 @@
 # Imports
 # ------------------------------
 from guizero import App, Window, Waffle, Box, Text, TextBox, PushButton
+import pygame
+from pygame import mixer
 
 # ------------------------------
 # Variables
@@ -49,9 +51,18 @@ class View:
         self.save_button = PushButton(self.panel, grid=[2,0], text="Save", command=self.handle_request_save)
         self.restore_button = PushButton(self.panel, grid=[3,0], text="Restore", command=self.handle_request_restore)
 
+        # Stream background music from file, repeating continuously.
+        pygame.init()
+        mixer.music.load('background.wav')
+        mixer.music.play(-1)
+        
         self.show_board(board_codes)
         self._init_palette()
         self.reset_user_interface()
+      
+        # set up exit function
+        self.app.when_closed = self.close_app
+        
         # enter endless loop, waiting for user input.
         self.app.display()
         
@@ -63,6 +74,7 @@ class View:
         self.best_score_display.value = "Best score: " + self.controller.best_player +": " + str(self.controller.best_score)
         self.best_score_display.show()
         self.play_button.text_color = "grey"
+        mixer.music.unpause()
                             
     def show_board(self, board_codes):        
         self._debug_2(board_codes[0:self.controller.size, 0:self.controller.size])
@@ -82,6 +94,12 @@ class View:
             self.score_text.hide()
             self.best_score_display.hide()
             self.play_button.text_color = "black"
+            mixer.music.pause()
+            
+    def close_app(self):
+        print("\nFinal score: " + str(self.controller.moves_taken))
+        mixer.music.stop()
+        self.app.destroy()
     
     #################### Helper Functions ################
         
